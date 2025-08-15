@@ -67,7 +67,7 @@
                 <div class="col-md-3">
                     <label for="date_end" class="form-label">Dia Fim</label>
                     <input type="text" id="date_end" name="date_end" class="form-control datepicker"
-                        value="{{ old('date_end', isset($agenda->DT_AGEND) ? \Carbon\Carbon::parse($agenda->DT_AGEND)->format('d/m/Y') : '') }}">
+                        value="{{ old('date_end', isset($agenda->DT_AGEND_FINAL) ? \Carbon\Carbon::parse($agenda->DT_AGEND)->format('d/m/Y') : '') }}">
                 </div>
 
                 <div class="col-md-3">
@@ -143,7 +143,7 @@
                 <!-- Serviço e Valor -->
                 <div class="col-md-3">
                     <label class="form-label">Serviço</label>
-                    <select id="form-select" name="ID_SERVICO" class="form-select">
+                    <select id="form-select" name="servico" class="form-select">
                         <option
                             value="{{ old('ID_SERVICO', isset($agenda->ID_SERVICO) ? $agenda->ID_SERVICO : '') }}"
                             selected>
@@ -156,8 +156,8 @@
                 $valorDisabled = $pagto === 'N' ? 'disabled' : '';
                 @endphp
                 <div class="col-md-3">
-                    <label for="VALOR_AGEND" class="form-label">Valor</label>
-                    <input type="text" id="VALOR_AGEND" name="VALOR_AGEND" class="form-control"
+                    <label for="valor" class="form-label">Valor</label>
+                    <input type="text" id="valor" name="valor" class="form-control"
                         value="{{ old('valor', $agenda->VALOR_AGEND ?? '') }}"
                         {{ $valorDisabled }}>
                 </div>
@@ -209,12 +209,7 @@
             </div>
         </form>
     </div>
-    <script>
-        window.agendaData = {
-            pacienteId: "{{ $agenda->ID_PACIENTE ?? '' }}",
-            nomePaciente: "{{ $agenda->NOME_COMPL_PACIENTE ?? '' }}"
-        };
-    </script>
+    </div>
     @if (session('success'))
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
@@ -222,6 +217,18 @@
             icon: 'success',
             title: 'Sucesso!',
             text: "{{ session('success') }}",
+        }).then(() => {
+            window.location.href = "{{ url('odontologia/consultarpaciente') }}";
+        });
+    </script>
+    @endif
+    @if ($errors->any())
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro ao validar informações',
+            html: `<ul style="text-align:left;">@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>`,
         });
     </script>
     @endif

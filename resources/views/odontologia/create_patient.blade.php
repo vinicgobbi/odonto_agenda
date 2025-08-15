@@ -53,7 +53,7 @@
                     <input type="text" id="cpf" name="cpf" class="form-control"
                         value="{{ old('cpf') }}"
                         style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;"
-                        maxlength="11" minlength="11" autocomplete="off">
+                        maxlength="12" minlength="11" autocomplete="off">
                     @endif
                 </div>
                 <div style="flex: 0.2;">
@@ -190,16 +190,18 @@
             icon: 'success',
             title: 'Sucesso!',
             text: "{{ session('success') }}",
+        }).then(() => {
+            window.location.href = "{{ url('odontologia/consultarpaciente') }}";
         });
     </script>
     @endif
-    @if (session('alert'))
+    @if ($errors->any())
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         Swal.fire({
-            icon: 'warning',
-            title: 'Atenção!',
-            text: "{{ session('alert') }}",
+            icon: 'error',
+            title: 'Erro ao validar informações',
+            html: `<ul style="text-align:left;">@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>`,
         });
     </script>
     @endif
